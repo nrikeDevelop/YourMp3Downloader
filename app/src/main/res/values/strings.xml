@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">You Mp3 Downloader</string>
+    <string name="permisons_not_granted">Debes aceptar todos los permisos</string>
+    <string name="not_url_function">Introduce la url</string>
+    <string name="not_find_links">No se han encontrado archivos de descarga sobre este link</string>
+    <string name="finish_download"></string>
+    <string name="downloaded">Descargando</string>
+
+
+</resources>

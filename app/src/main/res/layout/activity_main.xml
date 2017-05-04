@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    tools:context="susy.downloader.MainActivity">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_margin="30dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/white_shape"
+        android:id="@+id/linearLayout">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/helpImage"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:foregroundGravity="right"
+                android:src="@drawable/help_icon"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="10dp" />
+
+            <ImageView
+                android:layout_marginTop="25dp"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="#00000000"
+                android:src="@drawable/cloud_icon_titles"/>
+
+        </RelativeLayout>
+
+
+
+        <EditText
+            android:id="@+id/editTextUrl"
+            android:textSize="18sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Url mp3"
+            android:background="#00000000"
+            android:textColorHint="@color/colorText"
+            android:textColor="@color/colorText"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
+
+            android:lines="1"
+            android:scrollHorizontally="true"
+            android:ellipsize="end"
+            android:singleLine="true"
+            />
+
+      <Button
+          android:id="@+id/buttonDownload"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:background="@drawable/ripple_button"
+          android:text="Descargar"
+          android:layout_marginStart="20dp"
+          android:layout_marginEnd="20dp"
+          android:layout_marginBottom="25dp"
+          android:layout_marginTop="5dp"/>
+
+
+    </LinearLayout>
+
+
+
+    <RelativeLayout
+        android:id="@+id/loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_alignBottom="@+id/linearLayout"
+        android:background="@drawable/transparent_shape"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="50dp"
+            android:layout_height="50dp" />
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>
