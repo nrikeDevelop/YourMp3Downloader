@@ -27,6 +27,10 @@ dependencies {
     compile 'com.github.HaarigerHarald:android-youtubeExtractor:master-SNAPSHOT'
     compile 'com.android.support:appcompat-v7:25.3.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+
+    //GSON
+    compile 'com.google.code.gson:gson:2.2.4'
+
     testCompile 'junit:junit:4.12'
 }
 

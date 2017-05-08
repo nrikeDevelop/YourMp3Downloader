@@ -4,6 +4,7 @@ import android.app.DownloadManager;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Environment;
+import android.preference.Preference;
 import android.util.SparseArray;
 
 import java.io.File;
@@ -14,7 +15,9 @@ import java.util.Map;
 import at.huber.youtubeExtractor.VideoMeta;
 import at.huber.youtubeExtractor.YouTubeExtractor;
 import at.huber.youtubeExtractor.YtFile;
+import susy.downloader.common.Preferences;
 import susy.downloader.model.ListYTfile;
+import susy.downloader.model.fileYT;
 
 /**
  * Created by susy on 4/05/17.
@@ -26,7 +29,9 @@ public class MainPresenter {
     MainView mainView;
 
     Map<String, YtFile> mapFile;
-    ArrayList<ListYTfile> arrayListYTfiles;
+
+
+    ArrayList<fileYT> arrayListYTfiles;
 
     private String TYPE_AUDIO = "audio%2";
     private String TYPE_VIDEO = "video%2";
@@ -36,7 +41,16 @@ public class MainPresenter {
         this.context = context;
         this.mainView = mainView;
         mapFile = new HashMap<String, YtFile>();
-        arrayListYTfiles = new ArrayList<>();
+
+        if(Preferences.getListYTfile(context) != null){
+            ListYTfile  listYTfile = Preferences.getListYTfile(context);
+            arrayListYTfiles = listYTfile.getYtArrayList();
+        }else{
+            arrayListYTfiles = new ArrayList<>();
+        }
+
+        mainView.sizeListFiles(String.valueOf(countList()));
+
     }
 
     public void isFolderExist(){
@@ -47,23 +61,37 @@ public class MainPresenter {
         }
     }
 
+    //LIST
+
+    public void deleteList(){
+        arrayListYTfiles.clear();
+        Preferences.setListYTfile(context,new ListYTfile(arrayListYTfiles));
+    }
+
+    public int countList(){
+        return arrayListYTfiles.size();
+    }
+
     //ACTIONS YOUTUBE DOWNLOAD
 
     public void getYoutubeDownloadUrl(String youtubeLink, final String type) {
         youtubeExtractor(youtubeLink,type);
     }
 
-    public void getYoutubeDownloadUrlList(String youtubeLink, final String type) {
+    public void youtubeExtractorDetails(String youtubeLink){
 
-        mapFile = new HashMap<String, YtFile>();
+        new YouTubeExtractor(context) {
+            @Override
+            public void onExtractionComplete(SparseArray<YtFile> ytFiles, VideoMeta vMeta) {
 
-        youtubeExtractor(youtubeLink,type);
+                mainView.setYTNameFile(vMeta.getTitle());
+            }
+        }.extract(youtubeLink, true, false);
 
     }
 
     public void youtubeExtractor(String youtubeLink, final String type){
         new YouTubeExtractor(context) {
-
             @Override
             public void onExtractionComplete(SparseArray<YtFile> ytFiles, VideoMeta vMeta) {
 
@@ -110,24 +138,19 @@ public class MainPresenter {
                 if(mapFile.size() > 0 ){
 
                     if (type.equals(TYPE_AUDIO)){
-                        downloadFromUrl(mapFile.get("mp3").getUrl(),vMeta.getTitle() ,mapFile.get("mp3").getFormat().getExt());
+                        clearNameFile(vMeta.getTitle(),mapFile.get("mp3"));
+                        //downloadFromUrl(mapFile.get("mp3").getUrl(),vMeta.getTitle() ,mapFile.get("mp3").getFormat().getExt());
                     }
 
                     if (type.equals(TYPE_VIDEO)){
                         if(mapFile.get("192_mp4") != null){
-                            downloadFromUrl(mapFile.get("192_mp4").getUrl(),
-                                    vMeta.getTitle(),
-                                    mapFile.get("192_mp4").getFormat().getExt());
+                            clearNameFile(vMeta.getTitle(),mapFile.get("192_mp4"));
 
                         }else if (mapFile.get("128_mp4") != null){
-                            downloadFromUrl(mapFile.get("128_mp4").getUrl(),
-                                    vMeta.getTitle(),
-                                    mapFile.get("128_mp4").getFormat().getExt());
+                            clearNameFile(vMeta.getTitle(),mapFile.get("128_mp4"));
 
                         }else if (mapFile.get("96_mp4") != null){
-                            downloadFromUrl(mapFile.get("96_mp4").getUrl(),
-                                    vMeta.getTitle(),
-                                    mapFile.get("96_mp4").getFormat().getExt());
+                            clearNameFile(vMeta.getTitle(),mapFile.get("96_mp4"));
 
                         }else{
                             mainView.showMessage(context.getString(R.string.not_find_links));
@@ -138,12 +161,14 @@ public class MainPresenter {
                     if (type.equals(TYPE_LIST)){
 
                         //TODO CHECK IF EXIST IN LIST
-                        arrayListYTfiles.add(new ListYTfile(mapFile.get("mp3"),vMeta.getTitle()));
-                        mainView.hideLoadingLayout();
+                        arrayListYTfiles.add(new fileYT(mapFile.get("mp3"),vMeta.getTitle()));
 
-                        for (int i = 0 ; i < arrayListYTfiles.size();i++){
-                            System.out.println(">> TITLE "+arrayListYTfiles.get(i).getName());
-                        }
+                        Preferences.setListYTfile(context,
+                                new ListYTfile(arrayListYTfiles));
+
+                        mainView.sizeListFiles(String.valueOf(countList()));
+
+                        mainView.hideLoadingLayout();
 
                     }
 
@@ -156,26 +181,7 @@ public class MainPresenter {
     }
 
 
-    public void downloadFromUrl(String youtubeDlUrl, String downloadTitle, String fileName) {
-
-        Uri uri = Uri.parse(youtubeDlUrl);
-        DownloadManager.Request request = new DownloadManager.Request(uri);
-        request.setTitle(downloadTitle);
-
-        request.allowScanningByMediaScanner();
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
-
-        DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
-        manager.enqueue(request);
-
-        mainView.finish(context.getString(R.string.downloaded));
-
-    }
-
-
-    /*
-    public void changeNameUrlDownload(final String videoTitle, final YtFile ytfile) {
+    public void clearNameFile(final String videoTitle, final YtFile ytfile) {
         // Display some buttons and let the user choose the format
         String filename;
         if (videoTitle.length() > 55) {
@@ -188,6 +194,57 @@ public class MainPresenter {
 
         downloadFromUrl(ytfile.getUrl(), videoTitle, filename);
     }
-*/
+
+
+
+    public void downloadFromUrl(String youtubeDlUrl, String downloadTitle, String extension) {
+
+        Uri uri = Uri.parse(youtubeDlUrl);
+        DownloadManager.Request request = new DownloadManager.Request(uri);
+
+        request.allowScanningByMediaScanner();
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, downloadTitle+"."+extension);
+
+        DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+        manager.enqueue(request);
+
+        mainView.finish(context.getString(R.string.downloaded));
+
+    }
+
+    public void downloadFromUrlList(String youtubeDlUrl, String fileName, String downloadTitle, String extension,String nameList) {
+
+        String filename = fileName.replaceAll("\\\\|>|<|\"|\\||\\*|\\?|%|:|#|/", "");
+
+
+        Uri uri = Uri.parse(youtubeDlUrl);
+        DownloadManager.Request request = new DownloadManager.Request(uri);
+
+        request.allowScanningByMediaScanner();
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS+"/"+nameList, downloadTitle+"."+extension);
+
+        DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+        manager.enqueue(request);
+
+        mainView.finish(context.getString(R.string.downloaded));
+
+    }
+
+    public void downloadList(String nameList){
+        if(arrayListYTfiles.size() == 0){
+            mainView.showMessage(context.getString(R.string.list_empty_descriptio));
+        }else{
+
+            for (int i = 0; i< arrayListYTfiles.size(); i++){
+                fileYT fileYT = arrayListYTfiles.get(i);
+                //clearNameFile(fileYT.getName(),fileYT.getYtFile());
+                downloadFromUrlList(fileYT.getYtFile().getUrl(),fileYT.getName(),fileYT.getName(),fileYT.getYtFile().getFormat().getExt(),nameList);
+            }
+
+        }
+
+    }
 
 }

@@ -1,34 +1,24 @@
 package susy.downloader.model;
 
-import at.huber.youtubeExtractor.YtFile;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 /**
  * Created by susy on 8/05/17.
  */
 
 public class ListYTfile {
+    ArrayList<fileYT> ytArrayList;
 
-    YtFile ytFile;
-    String name;
-
-    public ListYTfile(YtFile ytFile, String name) {
-        this.ytFile = ytFile;
-        this.name = name;
+    public ListYTfile(ArrayList<fileYT> ytArrayList) {
+        this.ytArrayList = ytArrayList;
     }
 
-    public YtFile getYtFile() {
-        return ytFile;
+    public ArrayList<fileYT> getYtArrayList() {
+        return ytArrayList;
     }
 
-    public void setYtFile(YtFile ytFile) {
-        this.ytFile = ytFile;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setYtArrayList(ArrayList<fileYT> ytArrayList) {
+        this.ytArrayList = ytArrayList;
     }
 }

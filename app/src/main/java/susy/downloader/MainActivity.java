@@ -14,8 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,6 +22,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import susy.downloader.common.Preferences;
 
@@ -44,8 +44,11 @@ public class MainActivity extends AppCompatActivity implements MainView {
     TextView textDownloadList;
     EditText editTextUrl;
     EditText nameFolderEditText;
+    TextView nameFile;
+    TextView numberFilesListText;
     Button btaddList;
     Button btdeleteList;
+    Button btdownloadList;
     Button btaudio;
     Button btvideo;
     ImageView helpImage;
@@ -59,11 +62,14 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     public void setUI(){
         editTextUrl = (EditText) findViewById(R.id.editTextUrl);
+        nameFile = (TextView) findViewById(R.id.name_file_text);
         textDownloadList = (TextView) findViewById(R.id.text_download_list);
         nameFolderEditText = (EditText) findViewById(R.id.name_folder_edit_text);
+        numberFilesListText = (TextView) findViewById(R.id.numberListFilesTextView);
         loading = (RelativeLayout) findViewById(R.id.loading);
         helpImage = (ImageView) findViewById(R.id.helpImage);
         btaddList = (Button) findViewById(R.id.btAddList);
+        btdownloadList = (Button) findViewById(R.id.btDownloadList);
         btdeleteList = (Button) findViewById(R.id.btDeleteList);
         btaudio = (Button) findViewById(R.id.btaudio);
         btvideo = (Button) findViewById(R.id.btvideo);
@@ -92,8 +98,11 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clipData = clipboard.getPrimaryClip();
+
         if(clipData != null){
             link = clipData.getItemAt(0).getText().toString();
+            mainPresenter.youtubeExtractorDetails(link);
+
         }
 
         editTextUrl.setText(link);
@@ -104,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         btaddList.setOnClickListener(clickAddList);
         btdeleteList.setOnClickListener(clickDeleteList);
         nameFolderEditText.addTextChangedListener(textWatcher);
+        btdownloadList.setOnClickListener(clickDownloadListButton);
         btaudio.setOnClickListener(clickBasicAudio);
         btvideo.setOnClickListener(clickBasicVideo);
         helpImage.setOnClickListener(clickHelp);
@@ -143,6 +153,16 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 break;
 
         }
+    }
+
+    @Override
+    public void setYTNameFile(String name) {
+        nameFile.setText(name);
+    }
+
+    @Override
+    public void sizeListFiles(String sizeList) {
+        numberFilesListText.setText(sizeList);
     }
 
     @Override
@@ -199,15 +219,49 @@ public class MainActivity extends AppCompatActivity implements MainView {
         public void onClick(View v) {
             if(listButtons.getVisibility() == View.GONE){
                 listButtons.setVisibility(View.VISIBLE);
+                basicButtons.setVisibility(View.GONE);
             }else{
                 listButtons.setVisibility(View.GONE);
+                basicButtons.setVisibility(View.VISIBLE);
             }
         }
     };
 
+    View.OnClickListener clickDownloadListButton = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            mainPresenter.downloadList(nameFolderEditText.getText().toString());
+        }
+    };
+
+
     View.OnClickListener clickDeleteList = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+            alertDialog.setMessage(context.getString(R.string.dialog_delete_title));
+            alertDialog.setPositiveButton(context.getString(R.string.dialog_delete_yes),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mainPresenter.deleteList();
+                            numberFilesListText.setText(String.valueOf(mainPresenter.countList()));
+                            nameFolderEditText.setText("");
+                            dialog.dismiss();
+                        }
+                    });
+
+            alertDialog.setNegativeButton(context.getString(R.string.dialog_delete_no),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+            AlertDialog dialog = alertDialog.create();
+            dialog.show();
 
         }
     };
@@ -216,7 +270,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         @Override
         public void onClick(View v) {
             if(nameFolderEditText.getText().toString().equals("")){
-                Toast.makeText(context, context.getString(R.string.list_empty), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, context.getString(R.string.list_empty_name), Toast.LENGTH_SHORT).show();
             }else{
                 //TODO action
                 if(editTextUrl.getText().toString().equals("")){
@@ -260,6 +314,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         }
     };
 
+
     TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -276,8 +331,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
         }
     };
-
-
 
 }
 

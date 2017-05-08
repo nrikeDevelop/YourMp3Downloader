@@ -8,169 +8,195 @@
     android:gravity="center"
     tools:context="susy.downloader.MainActivity">
 
-
-    <LinearLayout
-        android:orientation="vertical"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_margin="30dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/white_shape"
-        android:id="@+id/linearLayout"
-        android:animateLayoutChanges="true">
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/helpImage"
-                android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:foregroundGravity="right"
-                android:src="@drawable/help_icon"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="10dp" />
-
-            <ImageView
-                android:layout_marginTop="25dp"
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:background="#00000000"
-                android:src="@drawable/cloud_icon_titles"/>
-
-        </RelativeLayout>
-
-        <EditText
-            android:id="@+id/editTextUrl"
-            android:textSize="18sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Url mp3"
-            android:background="#00000000"
-            android:textColorHint="@color/colorText"
-            android:textColor="@color/colorText"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="20dp"
-            android:lines="1"
-            android:scrollHorizontally="true"
-            android:ellipsize="end"
-            android:singleLine="true"
-            />
-
-        <TextView
-            android:id="@+id/text_download_list"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:text="@string/download_list"
-            android:textColor="@color/colorText"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginBottom="20dp"/>
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:id="@+id/linear_layout_list_buttons"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:layout_width="match_parent"
+            android:layout_margin="30dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/white_shape"
+            android:id="@+id/linearLayout"
+            android:animateLayoutChanges="true">
 
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
+                <ImageView
+                    android:id="@+id/helpImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:foregroundGravity="right"
+                    android:src="@drawable/help_icon"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="10dp" />
 
-            <Button
-                android:id="@+id/btDeleteList"
+                <ImageView
+                    android:layout_marginTop="25dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:background="#00000000"
+                    android:src="@drawable/cloud_icon_titles"/>
+
+            </RelativeLayout>
+
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/name_file_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
-                android:background="@drawable/ripple_button"
-                android:text="@string/delete_list"/>
-
-
-            <Button
-                android:id="@+id/btAddList"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:background="@drawable/ripple_button"
-                android:text="@string/add_to_list"/>
+                android:textSize="18sp"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/colorText"
+                android:text="@string/app_name"/>
 
             <EditText
-                android:id="@+id/name_folder_edit_text"
+                android:id="@+id/editTextUrl"
+                android:textSize="18sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="@string/name_list"
-                android:textColorHint="@color/colorTextShadow"
+                android:hint="Url mp3"
+                android:background="#00000000"
+                android:textColorHint="@color/colorText"
                 android:textColor="@color/colorText"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"/>
+                android:layout_marginLeft="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp"
+                android:lines="1"
+                android:scrollHorizontally="true"
+                android:ellipsize="end"
+                android:singleLine="true"
+                />
+
+            <TextView
+                android:id="@+id/text_download_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="@string/download_list"
+                android:textColor="@color/colorText"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="20dp"/>
 
             <LinearLayout
+                android:id="@+id/linear_layout_list_buttons"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="15dp">
+                android:orientation="vertical"
+                android:visibility="gone">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/name_folder_edit_text"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/files_added"
-                    android:textColor="@color/colorTextShadow"
-                    android:textSize="18sp"
+                    android:layout_marginBottom="10dp"
+                    android:hint="@string/name_list"
+                    android:textColorHint="@color/colorTextShadow"
+                    android:textColor="@color/colorText"
                     android:layout_marginStart="20dp"
-                    android:layout_marginLeft="20dp" />
+                    android:layout_marginEnd="20dp"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <Button
+                    android:id="@+id/btDeleteList"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:text="8"
-                    android:textColor="@color/colorTextShadow"
-                    android:textSize="18sp"/>
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/ripple_button"
+                    android:text="@string/delete_list"/>
+
+
+                <Button
+                    android:id="@+id/btAddList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/ripple_button"
+                    android:text="@string/add_to_list"/>
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginTop="15dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/files_added"
+                        android:textColor="@color/colorTextShadow"
+                        android:textSize="18sp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginLeft="20dp" />
+
+                    <TextView
+                        android:id="@+id/numberListFilesTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginLeft="20dp"
+                        android:text="8"
+                        android:textColor="@color/colorTextShadow"
+                        android:textSize="18sp"/>
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btDownloadList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/ripple_button"
+                    android:text="@string/download_list"
+                    android:layout_marginBottom="25dp"/>
+
+
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/linear_layout_basic_buttons"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="25dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btaudio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_button"
+                    android:text="Audio"/>
+
+                <Button
+                    android:id="@+id/btvideo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_button"
+                    android:text="Video"/>
+
+
+            </LinearLayout>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/linear_layout_basic_buttons"
-            android:layout_marginTop="25dp"
-            android:layout_marginBottom="25dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btaudio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ripple_button"
-                android:text="Audio"/>
-
-            <Button
-                android:id="@+id/btvideo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ripple_button"
-                android:text="Video"/>
-
-
-        </LinearLayout>
-
-
-    </LinearLayout>
-
-
+    </ScrollView>
 
     <RelativeLayout
         android:id="@+id/loading"
@@ -179,7 +205,6 @@
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:layout_marginTop="30dp"
-        android:layout_alignBottom="@+id/linearLayout"
         android:background="@drawable/transparent_shape"
         android:gravity="center"
         android:visibility="gone">

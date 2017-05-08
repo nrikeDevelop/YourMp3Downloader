@@ -6,10 +6,14 @@ package susy.downloader;
 
 public interface MainView {
 
-    public void showMessage(String msg);
+    void setYTNameFile(String name);
 
-    public void finish(String msg);
+    void sizeListFiles(String sizeList);
 
-    public void hideLoadingLayout();
+    void showMessage(String msg);
+
+    void finish(String msg);
+
+    void hideLoadingLayout();
 
 }
