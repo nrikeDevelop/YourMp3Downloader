@@ -8,6 +8,8 @@ import android.util.SparseArray;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import at.huber.youtubeExtractor.VideoMeta;
 import at.huber.youtubeExtractor.YouTubeExtractor;
@@ -23,10 +25,16 @@ public class MainPresenter {
     Context context;
     MainView mainView;
 
+    Map<String, YtFile> mapFile;
+
+    private String TYPE_AUDIO = "audio%2";
+    private String TYPE_VIDEO = "video%2";
+
     public MainPresenter(Context context, MainView mainView) {
         this.context = context;
         this.mainView = mainView;
         ytFilesArray = new ArrayList<>();
+        mapFile = new HashMap<String, YtFile>();
     }
 
     public void isFolderExist(){
@@ -37,7 +45,7 @@ public class MainPresenter {
         }
     }
 
-    public void getYoutubeDownloadUrl(String youtubeLink) {
+    public void getYoutubeDownloadUrl(String youtubeLink, final String type) {
 
         new YouTubeExtractor(context) {
 
@@ -54,16 +62,58 @@ public class MainPresenter {
                 for (int i = 0, itag; i < ytFiles.size(); i++) {
                     itag = ytFiles.keyAt(i);
                     YtFile ytFile = ytFiles.get(itag);
+
+                    //-1 <> 360 good quality
                     if (ytFile.getFormat().getHeight() == -1 || ytFile.getFormat().getHeight() >= 360) {
 
+                        System.out.println(">>"+ytFile.getUrl());
+
+                        if(ytFile.getUrl().contains(TYPE_VIDEO)) {
+
+                            //Bitrate 192,128,96
+                            if(ytFile.getFormat().getAudioBitrate() == 192){
+                                mapFile.put("192_mp4",ytFile);
+                            }
+
+                            if(ytFile.getFormat().getAudioBitrate() == 128){
+                                mapFile.put("128_mp4",ytFile);
+                            }
+
+                            if(ytFile.getFormat().getAudioBitrate() == 96){
+                                mapFile.put("96_mp4",ytFile);
+                            }
+
+                        }
+
                         //If url, contains audio , can save mp3
-                        if(ytFile.getUrl().contains("audio")){
-                            ytFilesArray.add(ytFile);
+                        if(ytFile.getUrl().contains(TYPE_AUDIO)){
+                            mapFile.put("mp3",ytFile);
                         }
                     }
                 }
-                if(ytFilesArray.size() > 0 ){
-                    changeNameUrlDownload(vMeta.getTitle(), ytFilesArray.get(0));
+
+                System.out.println(mapFile.size());
+
+
+                if(mapFile.size() > 0 ){
+
+                   if (type.equals(TYPE_AUDIO)){
+                       changeNameUrlDownload(vMeta.getTitle(),mapFile.get("mp3"));
+                   }
+
+                   if (type.equals(TYPE_VIDEO)){
+                       if(mapFile.get("192_mp4") != null){
+                           changeNameUrlDownload(vMeta.getTitle(),mapFile.get("192_mp4"));
+                       }else if (mapFile.get("128_mp4") != null){
+                           changeNameUrlDownload(vMeta.getTitle(),mapFile.get("128_mp4"));
+                       }else if (mapFile.get("96_mp4") != null){
+                           changeNameUrlDownload(vMeta.getTitle(),mapFile.get("96_mp4"));
+                       }else{
+                           mainView.showMessage(context.getString(R.string.not_find_links));
+                           mainView.hideLoadingLayout();
+                       }
+                   }
+                    //changeNameUrlDownload(vMeta.getTitle(), ytFilesArray.get(0));
                 }else{
                     mainView.showMessage(context.getString(R.string.not_find_links));
                     mainView.hideLoadingLayout();

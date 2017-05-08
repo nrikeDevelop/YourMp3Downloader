@@ -64,16 +64,30 @@
             android:singleLine="true"
             />
 
-      <Button
-          android:id="@+id/buttonDownload"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:background="@drawable/ripple_button"
-          android:text="Descargar"
-          android:layout_marginStart="20dp"
-          android:layout_marginEnd="20dp"
-          android:layout_marginBottom="25dp"
-          android:layout_marginTop="5dp"/>
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="25dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btaudio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_button"
+                android:text="Audio"/>
+
+            <Button
+                android:id="@+id/btvideo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_button"
+                android:text="Video"/>
+
+
+        </LinearLayout>
 
 
     </LinearLayout>
