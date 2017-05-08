@@ -14,6 +14,7 @@ import java.util.Map;
 import at.huber.youtubeExtractor.VideoMeta;
 import at.huber.youtubeExtractor.YouTubeExtractor;
 import at.huber.youtubeExtractor.YtFile;
+import susy.downloader.model.ListYTfile;
 
 /**
  * Created by susy on 4/05/17.
@@ -21,20 +22,21 @@ import at.huber.youtubeExtractor.YtFile;
 
 public class MainPresenter {
 
-    ArrayList<YtFile> ytFilesArray ;
     Context context;
     MainView mainView;
 
     Map<String, YtFile> mapFile;
+    ArrayList<ListYTfile> arrayListYTfiles;
 
     private String TYPE_AUDIO = "audio%2";
     private String TYPE_VIDEO = "video%2";
+    private String TYPE_LIST = "list_type";
 
     public MainPresenter(Context context, MainView mainView) {
         this.context = context;
         this.mainView = mainView;
-        ytFilesArray = new ArrayList<>();
         mapFile = new HashMap<String, YtFile>();
+        arrayListYTfiles = new ArrayList<>();
     }
 
     public void isFolderExist(){
@@ -45,8 +47,21 @@ public class MainPresenter {
         }
     }
 
-    public void getYoutubeDownloadUrl(String youtubeLink, final String type) {
+    //ACTIONS YOUTUBE DOWNLOAD
 
+    public void getYoutubeDownloadUrl(String youtubeLink, final String type) {
+        youtubeExtractor(youtubeLink,type);
+    }
+
+    public void getYoutubeDownloadUrlList(String youtubeLink, final String type) {
+
+        mapFile = new HashMap<String, YtFile>();
+
+        youtubeExtractor(youtubeLink,type);
+
+    }
+
+    public void youtubeExtractor(String youtubeLink, final String type){
         new YouTubeExtractor(context) {
 
             @Override
@@ -66,7 +81,7 @@ public class MainPresenter {
                     //-1 <> 360 good quality
                     if (ytFile.getFormat().getHeight() == -1 || ytFile.getFormat().getHeight() >= 360) {
 
-                        System.out.println(">>"+ytFile.getUrl());
+                        //System.out.println(">>"+ytFile.getUrl());
 
                         if(ytFile.getUrl().contains(TYPE_VIDEO)) {
 
@@ -92,50 +107,54 @@ public class MainPresenter {
                     }
                 }
 
-                System.out.println(mapFile.size());
-
-
                 if(mapFile.size() > 0 ){
 
-                   if (type.equals(TYPE_AUDIO)){
-                       changeNameUrlDownload(vMeta.getTitle(),mapFile.get("mp3"));
-                   }
+                    if (type.equals(TYPE_AUDIO)){
+                        downloadFromUrl(mapFile.get("mp3").getUrl(),vMeta.getTitle() ,mapFile.get("mp3").getFormat().getExt());
+                    }
 
-                   if (type.equals(TYPE_VIDEO)){
-                       if(mapFile.get("192_mp4") != null){
-                           changeNameUrlDownload(vMeta.getTitle(),mapFile.get("192_mp4"));
-                       }else if (mapFile.get("128_mp4") != null){
-                           changeNameUrlDownload(vMeta.getTitle(),mapFile.get("128_mp4"));
-                       }else if (mapFile.get("96_mp4") != null){
-                           changeNameUrlDownload(vMeta.getTitle(),mapFile.get("96_mp4"));
-                       }else{
-                           mainView.showMessage(context.getString(R.string.not_find_links));
-                           mainView.hideLoadingLayout();
-                       }
-                   }
-                    //changeNameUrlDownload(vMeta.getTitle(), ytFilesArray.get(0));
+                    if (type.equals(TYPE_VIDEO)){
+                        if(mapFile.get("192_mp4") != null){
+                            downloadFromUrl(mapFile.get("192_mp4").getUrl(),
+                                    vMeta.getTitle(),
+                                    mapFile.get("192_mp4").getFormat().getExt());
+
+                        }else if (mapFile.get("128_mp4") != null){
+                            downloadFromUrl(mapFile.get("128_mp4").getUrl(),
+                                    vMeta.getTitle(),
+                                    mapFile.get("128_mp4").getFormat().getExt());
+
+                        }else if (mapFile.get("96_mp4") != null){
+                            downloadFromUrl(mapFile.get("96_mp4").getUrl(),
+                                    vMeta.getTitle(),
+                                    mapFile.get("96_mp4").getFormat().getExt());
+
+                        }else{
+                            mainView.showMessage(context.getString(R.string.not_find_links));
+                            mainView.hideLoadingLayout();
+                        }
+                    }
+
+                    if (type.equals(TYPE_LIST)){
+
+                        //TODO CHECK IF EXIST IN LIST
+                        arrayListYTfiles.add(new ListYTfile(mapFile.get("mp3"),vMeta.getTitle()));
+                        mainView.hideLoadingLayout();
+
+                        for (int i = 0 ; i < arrayListYTfiles.size();i++){
+                            System.out.println(">> TITLE "+arrayListYTfiles.get(i).getName());
+                        }
+
+                    }
+
                 }else{
                     mainView.showMessage(context.getString(R.string.not_find_links));
                     mainView.hideLoadingLayout();
                 }
             }
         }.extract(youtubeLink, true, false);
-
     }
 
-    public void changeNameUrlDownload(final String videoTitle, final YtFile ytfile) {
-        // Display some buttons and let the user choose the format
-        String filename;
-        if (videoTitle.length() > 55) {
-            filename = videoTitle.substring(0, 55) + "." + ytfile.getFormat().getExt();
-        } else {
-            filename = videoTitle + "." + ytfile.getFormat().getExt();
-        }
-
-        filename = filename.replaceAll("\\\\|>|<|\"|\\||\\*|\\?|%|:|#|/", "");
-
-        downloadFromUrl(ytfile.getUrl(), videoTitle, filename);
-    }
 
     public void downloadFromUrl(String youtubeDlUrl, String downloadTitle, String fileName) {
 
@@ -154,5 +173,21 @@ public class MainPresenter {
 
     }
 
+
+    /*
+    public void changeNameUrlDownload(final String videoTitle, final YtFile ytfile) {
+        // Display some buttons and let the user choose the format
+        String filename;
+        if (videoTitle.length() > 55) {
+            filename = videoTitle.substring(0, 55) + "." + ytfile.getFormat().getExt();
+        } else {
+            filename = videoTitle + "." + ytfile.getFormat().getExt();
+        }
+
+        filename = filename.replaceAll("\\\\|>|<|\"|\\||\\*|\\?|%|:|#|/", "");
+
+        downloadFromUrl(ytfile.getUrl(), videoTitle, filename);
+    }
+*/
 
 }

@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     private String TYPE_AUDIO = "audio%2";
     private String TYPE_VIDEO = "video%2";
+    private String TYPE_LIST = "list_type";
+
 
     MainView mainView;
     MainPresenter mainPresenter;
@@ -217,7 +219,13 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 Toast.makeText(context, context.getString(R.string.list_empty), Toast.LENGTH_SHORT).show();
             }else{
                 //TODO action
-
+                if(editTextUrl.getText().toString().equals("")){
+                    Toast.makeText(context, context.getString(R.string.not_url_function), Toast.LENGTH_SHORT).show();
+                }else{
+                    //TODO do actions
+                    mainPresenter.getYoutubeDownloadUrl(editTextUrl.getText().toString(),TYPE_LIST);
+                    loading.setVisibility(View.VISIBLE);
+                }
             }
         }
     };
