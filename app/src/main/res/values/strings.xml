@@ -5,7 +5,12 @@
     <string name="not_find_links">No se han encontrado archivos de descarga sobre este link</string>
     <string name="finish_download"></string>
     <string name="downloaded">Descargando</string>
-
+    <string name="add_to_list">Añadir a la lista</string>
+    <string name="delete_list">Eliminar lista</string>
+    <string name="download_list">Descargar lista</string>
+    <string name="files_added">Tamaño de la lista</string>
+    <string name="name_list">Nombre de la lista</string>
+    <string name="list_empty">Introduce el nombre de la lista</string>
     <string name="help">
         Descarga mp3 facilmente. Entra en un video de YouTube, en el apartado compartir pulsa
         copiar enlace. Entra en la app y pulsa descargar. El mp3 se descargará en la carpeta
