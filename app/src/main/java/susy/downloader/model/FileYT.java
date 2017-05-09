@@ -6,12 +6,12 @@ import at.huber.youtubeExtractor.YtFile;
  * Created by susy on 8/05/17.
  */
 
-public class fileYT {
+public class FileYT {
 
     YtFile ytFile;
     String name;
 
-    public fileYT(YtFile ytFile, String name) {
+    public FileYT(YtFile ytFile, String name) {
         this.ytFile = ytFile;
         this.name = name;
     }

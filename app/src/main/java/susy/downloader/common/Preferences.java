@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import com.google.gson.Gson;
 
 import susy.downloader.model.ListYTfile;
-import susy.downloader.model.fileYT;
 
 /**
  * Created by susy on 8/05/17.

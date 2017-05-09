@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private String TYPE_VIDEO = "video%2";
     private String TYPE_LIST = "list_type";
 
-
     MainView mainView;
     MainPresenter mainPresenter;
 
@@ -96,14 +95,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
         //create data
         mainPresenter.isFolderExist();
 
-        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clipData = clipboard.getPrimaryClip();
-
-        if(clipData != null){
-            link = clipData.getItemAt(0).getText().toString();
-            mainPresenter.youtubeExtractorDetails(link);
-
-        }
+        //get link
+        clipBoard();
 
         editTextUrl.setText(link);
 
@@ -118,6 +111,22 @@ public class MainActivity extends AppCompatActivity implements MainView {
         btvideo.setOnClickListener(clickBasicVideo);
         helpImage.setOnClickListener(clickHelp);
 
+    }
+
+    public void clipBoard(){
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clipData = clipboard.getPrimaryClip();
+
+        if(clipData != null){
+            link = clipData.getItemAt(0).getText().toString();
+            mainPresenter.youtubeExtractorDetails(link);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        clipBoard();
     }
 
     @Override

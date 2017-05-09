@@ -4,7 +4,6 @@ import android.app.DownloadManager;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Environment;
-import android.preference.Preference;
 import android.util.SparseArray;
 
 import java.io.File;
@@ -16,8 +15,8 @@ import at.huber.youtubeExtractor.VideoMeta;
 import at.huber.youtubeExtractor.YouTubeExtractor;
 import at.huber.youtubeExtractor.YtFile;
 import susy.downloader.common.Preferences;
+import susy.downloader.model.FileYT;
 import susy.downloader.model.ListYTfile;
-import susy.downloader.model.fileYT;
 
 /**
  * Created by susy on 4/05/17.
@@ -31,7 +30,7 @@ public class MainPresenter {
     Map<String, YtFile> mapFile;
 
 
-    ArrayList<fileYT> arrayListYTfiles;
+    ArrayList<FileYT> arrayListYTfiles;
 
     private String TYPE_AUDIO = "audio%2";
     private String TYPE_VIDEO = "video%2";
@@ -161,7 +160,7 @@ public class MainPresenter {
                     if (type.equals(TYPE_LIST)){
 
                         //TODO CHECK IF EXIST IN LIST
-                        arrayListYTfiles.add(new fileYT(mapFile.get("mp3"),vMeta.getTitle()));
+                        arrayListYTfiles.add(new FileYT(mapFile.get("mp3"),vMeta.getTitle()));
 
                         Preferences.setListYTfile(context,
                                 new ListYTfile(arrayListYTfiles));
@@ -238,8 +237,8 @@ public class MainPresenter {
         }else{
 
             for (int i = 0; i< arrayListYTfiles.size(); i++){
-                fileYT fileYT = arrayListYTfiles.get(i);
-                //clearNameFile(fileYT.getName(),fileYT.getYtFile());
+                FileYT fileYT = arrayListYTfiles.get(i);
+                //clearNameFile(FileYT.getName(),FileYT.getYtFile());
                 downloadFromUrlList(fileYT.getYtFile().getUrl(),fileYT.getName(),fileYT.getName(),fileYT.getYtFile().getFormat().getExt(),nameList);
             }
 

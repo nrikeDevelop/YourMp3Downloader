@@ -1,6 +1,5 @@
 package susy.downloader.model;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -8,17 +7,17 @@ import java.util.ArrayList;
  */
 
 public class ListYTfile {
-    ArrayList<fileYT> ytArrayList;
+    ArrayList<FileYT> ytArrayList;
 
-    public ListYTfile(ArrayList<fileYT> ytArrayList) {
+    public ListYTfile(ArrayList<FileYT> ytArrayList) {
         this.ytArrayList = ytArrayList;
     }
 
-    public ArrayList<fileYT> getYtArrayList() {
+    public ArrayList<FileYT> getYtArrayList() {
         return ytArrayList;
     }
 
-    public void setYtArrayList(ArrayList<fileYT> ytArrayList) {
+    public void setYtArrayList(ArrayList<FileYT> ytArrayList) {
         this.ytArrayList = ytArrayList;
     }
 }

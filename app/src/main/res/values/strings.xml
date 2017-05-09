@@ -15,9 +15,19 @@
     <string name="list_empty_descriptio">Lista vacia, añade canciones</string>
 
     <string name="help">
-        Descarga mp3 facilmente. Entra en un video de YouTube, en el apartado compartir pulsa
+        Descarga Audios y Videos facilmente.
+        \n\n
+        Accede a Youtube, en el apartado compartir pulsa
         copiar enlace. Entra en la app y pulsa descargar. El mp3 se descargará en la carpeta
-        Downloads de tu movil.
+        "Descargas" de tu móvil.
+        \n\n
+        Crea tus listas y descárgalas
+        \n\n
+        Pulsa en "Descargar lista". A continuación introduce un nombre. Luego sigues el mismo
+        procedimiento, copias enlace y añades a la lista. Para acabar pulsa en "Descargar lista",
+        seguidamente busca la lista en tu reproductor de música y escúchala. Acuerdate de pulsar
+        "Eliminar lista" cuando quieras crear otra lista de reproducción.
+
     </string>
     <string name="dialog_delete_title">¿Eliminar lista?</string>
     <string name="dialog_delete_yes">si</string>
