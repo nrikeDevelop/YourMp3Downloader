@@ -11,9 +11,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import at.huber.youtubeExtractor.VideoMeta;
-import at.huber.youtubeExtractor.YouTubeExtractor;
-import at.huber.youtubeExtractor.YtFile;
+import susy.downloader.extractor.VideoMeta;
+import susy.downloader.extractor.YouTubeExtractor;
+import susy.downloader.extractor.YtFile;
+
+;
 
 /**
  * Created by susy on 4/05/17.
